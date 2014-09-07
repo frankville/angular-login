@@ -13,7 +13,7 @@ mongoose.connect('mongodb://localhost/users');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
-  // yay!
+    console.log("mongodb connected!");
 });
 
 var UserSchema = mongoose.Schema({
@@ -69,16 +69,11 @@ passport.deserializeUser(function(id, done) {
 
 function isAuthenticated(req, res, next) {
 
-  // do any checks you want to in here
-
-  // CHECK THE USER STORED IN SESSION FOR A CUSTOM VARIABLE
-  // you can do this however you want with whatever variables you set up
-  if (req.user)
+  if (req.user)//if req.user is null then the request is not authorized (passport creates req.user once user authenticates successfully)
     return next();
 
-  // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
-    res.status(401).end();
-;
+    res.status(401).end();//sends 401 (unauthorized) to the client. You can handle http errors using the XHR object
+
 }
 
 app.use(function(req,res,next){
@@ -91,7 +86,7 @@ app.get('/',function(req,res){
 });
 
 
-app.get("/saveUsers",function(req,res,next){
+app.get("/saveUsers",function(req,res,next){ //this is just to create some users on mongodb
   var user1 = new User({ username: "a", password: "a" });
   user1.save(function (err, user1) {
     if (err) return console.error(err);
@@ -105,25 +100,26 @@ app.get("/saveUsers",function(req,res,next){
   res.status(200).end()
 });
 
-app.get("/userInfo",isAuthenticated,function(req,res){
-  res.json(req.user);
+app.get("/userInfo",isAuthenticated,function(req,res){//the function isAuthenticated will be called before function(req,res)
+  //once this function returns next() (auth succeeded) the other function will be invoked 
+  res.json(req.user);//if this line is executed is because the authentication succeeded
 });
 
 app.post('/login',
-  passport.authenticate('local'), function(req,res){
+  passport.authenticate('local'), function(req,res){//receives the auth request and send a 200 code if succeeded
   res.status(200).end();
   }
 );
 
 app.get("/logout",isAuthenticated, function(req,res){
-  req.session.destroy(function(err){
+  req.session.destroy(function(err){//destroy the session object and send a 200 code indicating the logout process was successfull
     if(err){ throw err}
   });
   res.status(200).end()
 
 });
 
-server = http.createServer(app);
+server = http.createServer(app);//creates server and listen for connections
 server.listen(2011, function () {
     console.log('server escuchando en http://devcloud.dnsdynamic.com:2011/');
 });
