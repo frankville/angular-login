@@ -1,0 +1,27 @@
+<div ng-controller="loginController" class="container">
+    <div class="row">
+        <alert id="alertDiv" type="{{alert.type}}">{{alert.msg}}</alert>
+    </div>
+    <div class="row">
+        <form novalidate ng-submit="login(credentials)" class="col-xs-4 form-horizontal">
+            <div>
+                <div class="form-group">
+                     <label for="username">Username:</label>
+                     <input id="username" type="text" class="form-control" ng-model="credentials.username"/>
+                </div>
+
+            </div>
+            <div>
+                <div class="form-group">
+                     <label for="userpass">Password:</label>
+                    <input id="userpass" type="password" class="form-control" ng-model="credentials.password"/>
+                </div>
+
+            </div>
+            <div>
+                <input type="submit" class="btn btn-default" value="Log In"/>
+            </div>
+        </form>
+    </div>
+
+</div>
