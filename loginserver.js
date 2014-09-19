@@ -1,7 +1,6 @@
 var express = require("express"); 
 var passport = require("passport");
 var bodyParser = require("body-parser");
-//var multer = require("multer");
 var cookieParser = require("cookie-parser");
 var expressSession = require("express-session");
 var LocalStrategy = require("passport-local").Strategy;
@@ -18,7 +17,8 @@ db.once('open', function callback () {
 
 var UserSchema = mongoose.Schema({
     username: String,
-    password: String
+    password: String,
+    role: String
 });
 
 var User = mongoose.model('User', UserSchema);
@@ -85,21 +85,26 @@ app.get('/',function(req,res){
 
 });
 
-
+/*
 app.get("/saveUsers",function(req,res,next){ //this is just to create some users on mongodb
-  var user1 = new User({ username: "a", password: "a" });
+  var user1 = new User({ username: "a", password: "a", role:"admin" });
   user1.save(function (err, user1) {
     if (err) return console.error(err);
     console.log("user1 guardado");
   }); 
-  var user2 = new User({ username: "b", password: "b" });
+  var user2 = new User({ username: "b", password: "b", role:"customer" });
   user2.save(function (err, user2) {
     if (err) return console.error(err);
     console.log("user2 guardado");
   }); 
+  var user3 = new User({ username: "c", password: "c", role:"user" });
+  user3.save(function (err, user3) {
+    if (err) return console.error(err);
+    console.log("user3 guardado");
+  });
   res.status(200).end()
 });
-
+*/
 app.get("/userInfo",isAuthenticated,function(req,res){//the function isAuthenticated will be called before function(req,res)
   //once this function returns next() (auth succeeded) the other function will be invoked 
   res.json(req.user);//if this line is executed is because the authentication succeeded

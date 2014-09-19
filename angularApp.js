@@ -23,35 +23,37 @@ app.factory("authService",["$resource",function($resource){
 }]);
 
 
-app.controller("loginController",function($scope,authService,$location){
+app.controller("loginController",function($scope,authService,$location,$timeout){
 
 	  $scope.credentials = {
 	    username: '',
-	    password: ''
+	    password: '',
+	    role: ''
 	  };
-	  $scope.alert = {};
-
+	  $scope.alert = [];
+	  $scope.alertCollapsed = true;
 	  init();
 
 	  function init(){
-	  	$scope.alert = {type:"info",msg:"Enter your credentials"};
+	  	 $scope.alert.push({ type: "info" , msg:"Enter your credentials" });
+	  }
+
+	  $scope.hideAlert = function(){
+	  		$scope.alertCollapsed = true;
 	  }
 
 		
-	  $scope.setErrorAlert = function(text) {
-	    $scope.alert = {type: 'danger',msg: text};
-	    $("#alertDiv").fadeIn("fast");
-	    setTimeout(function(){	
-	    	$("#alertDiv").fadeOut("fast");
-	    },3000);
+	  $scope.setAlert = function(type,text) {
+	  	$scope.alertCollapsed = false;
+	  	 $scope.alert.splice(0,1);
+	  	 $scope.alert.push({ type: type , msg: text });
 	  };
 
 	  $scope.login = function (credentials) {
-	  	console.log(credentials);
 	  	authService.login(credentials).$promise.then(function(res){
-	  		$location.path("/main");
+	  			$location.path("/main");
 	  	},function(err){
-	  		$scope.setErrorAlert("error en login! "+err);
+	  		$scope.setAlert('danger',"El usuario y/o la contraseña no son válidos");
 	  	});
 	    //call to authService
 	  };
@@ -67,39 +69,37 @@ app.factory("logoutService",["$resource",function($resource){
 	});
 }]);
 
-app.controller("mainViewController",function($scope,userInfoService,logoutService,$location){
+app.controller("mainViewController",function($scope,userInfoService,logoutService,$location,$timeout){
 	$scope.user = {};
-	$scope.alert = {};
+	$scope.alert = [];
+	$scope.alertCollapsed = true;
+
+	$scope.hideAlert = function(){
+	  		$scope.alertCollapsed = true;
+	}
 
 	init();
 		
 	function init(){
-		$("#alertMain").fadeIn("fast");
-		$scope.alert = {type: 'info',msg: "click button to log out"};
+		$scope.alert.push({type: 'info',msg: "click button to log out"});
 		$scope.user = userInfoService.get(function(res){
-				
+			//its ok!
 		},function(err){
-			$scope.setErrorAlert("Error al pedir info de usuario "+err);
+			$scope.setAlert("danger","Error al pedir info de usuario "+err);
 		});
 	};
-
-	  $scope.setErrorAlert = function(text) {
-	    $scope.alert = {type: 'danger',msg: text};
-	    $("#alertMain").fadeIn("fast");
-	    setTimeout(function(){	
-	    	$("#alertMain").fadeOut("fast");
-	    },3000);
+	  $scope.setAlert = function(type,text) {
+	  	$scope.alertCollapsed = false;
+	  	 $scope.alert.splice(0,1);
+	  	 $scope.alert.push({ type: type , msg: text });
 	  };
 
 	$scope.logout = function(){
 		logoutService.get().$promise.then(function(res){
 			$location.path("/");
 		},function(err){
-			$scope.setErrorAlert("Error al cerrar sesión "+err);
+			$scope.setAlert("danger","Error al cerrar sesión "+err);
 		});
 	}
-
-
-
 
 });

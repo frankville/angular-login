@@ -1,27 +1,49 @@
-<div ng-controller="loginController" class="container">
-    <div class="row">
-        <alert id="alertDiv" type="{{alert.type}}">{{alert.msg}}</alert>
-    </div>
-    <div class="row">
-        <form novalidate ng-submit="login(credentials)" class="col-xs-4 form-horizontal">
-            <div>
-                <div class="form-group">
-                     <label for="username">Username:</label>
-                     <input id="username" type="text" class="form-control" ng-model="credentials.username"/>
-                </div>
+<div ng-controller="loginController">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Menu</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="">Dashboard</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul id="navbarUsuario" class="nav navbar-nav navbar-right collapse">
 
-            </div>
-            <div>
-                <div class="form-group">
-                     <label for="userpass">Password:</label>
-                    <input id="userpass" type="password" class="form-control" ng-model="credentials.password"/>
-                </div>
-
-            </div>
-            <div>
-                <input type="submit" class="btn btn-default" value="Log In"/>
-            </div>
-        </form>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
     </div>
+    <div class="container">
+
+        <div class="row">
+                <span class="col-xs-4"></span>
+                <div class="col-xs-4" collapse="alertCollapsed">
+                     <alert ng-repeat="a in alert" type="{{a.type}}">{{a.msg}}</alert>
+                </div>
+                <span class="col-xs-4"></span>
+        </div>
+        <div class="row">
+                <span class="col-xs-4"></span>
+                <form class="col-xs-4 form-horizontal  rounded-container" role="form">
+                        <div class="form-group">
+                             <label for="username">Username:</label>
+                             <input id="username" type="text" class="form-control" ng-model="credentials.username" ng-keydown="hideAlert()">
+                        </div>
+
+                        <div class="form-group">
+                             <label for="userpass">Password:</label>
+                            <input id="userpass" type="password" class="form-control" ng-model="credentials.password" ng-keydown="hideAlert()">
+                        </div>
+                        <input type="submit" class="btn btn-primary form-control" ng-click="login(credentials)" value="Log In">
+                </form>
+                <span class="col-xs-4"></span>
+
+        </div>
+    </div>
+
 
 </div>

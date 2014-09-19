@@ -1,6 +1,25 @@
-<div ng-controller="mainViewController" class="container">
+<div ng-controller="mainViewController">
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Menu</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Dashboard</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul id="navbarUsuario" class="nav navbar-nav navbar-right ">
+				<li><a href="" >{{user.username}}</a></li>
+                <li><a href="" ng-click="logout()">LogOut</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
 	<div class="row">
-		<div class="col-xs-4 container">
+		<div class="container">
 			<div class="panel panel-info">
 			  <div class="panel-heading">
 			    <h3 class="panel-title">User Info</h3>
@@ -8,17 +27,16 @@
 			  <div class="panel-body">
 			    	<h4><span class="label label-info">{{user.username}}</span></h4>
 					<h4><span class="label label-info">{{user.password}}</span></h4>
+					<h4><span class="label label-info">{{user.role}}</span></h4>
 					<h4><span class="label label-info">{{user._id}}</span></h4>
 			  </div>
 			</div>
 		</div>
 	</div>
+
 	<div class="row">
-		<div class="col-xs-4 container">
-			<button class="btn btn-default" ng-click="logout()">Log Out</button>
+		<div collapse="alertCollapsed">
+			<alert class="col-xs-4" ng-repeat="a in alert" type="{{a.type}}" >{{a.msg}}</alert>
 		</div>
-	</div>
-	<div class="row">
-        <alert class="col-xs-4" id="alertMain" type="{{alert.type}}" >{{alert.msg}}</alert>
     </div>
 </div>
