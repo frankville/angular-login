@@ -105,6 +105,11 @@ app.get("/saveUsers",function(req,res,next){ //this is just to create some users
   res.status(200).end()
 });
 */
+
+app.get("/isLoggedIn", isAuthenticated, function(req,res){
+    res.status(200).end();
+});
+
 app.get("/userInfo",isAuthenticated,function(req,res){//the function isAuthenticated will be called before function(req,res)
   //once this function returns next() (auth succeeded) the other function will be invoked 
   res.json(req.user);//if this line is executed is because the authentication succeeded

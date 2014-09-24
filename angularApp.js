@@ -1,5 +1,16 @@
 var app = angular.module("loginApp",["ngRoute","ngResource","ui.bootstrap"]);
 
+app.run(['$rootScope', '$location', 'authCheckService', function ($rootScope, $location, authCheckService) {
+    $rootScope.$on('$routeChangeStart', function (event) {
+
+    	authCheckService.query().$promise.then(function(res){
+    		$location.path("/main");
+    	},function(err){
+			$location.path("/");
+    	});
+    });
+}]);
+
 app.config(function($routeProvider,$locationProvider){
 	$routeProvider.when("/",{
 		controller: "loginController",
@@ -9,7 +20,6 @@ app.config(function($routeProvider,$locationProvider){
 	.when("/main",{
 		controller: "mainViewController",
 		templateUrl: "views/mainView.html"
-
 	})
 	
 	.otherwise({ redirectTo:"/" });
@@ -22,6 +32,11 @@ app.factory("authService",["$resource",function($resource){
 	});
 }]);
 
+app.factory("authCheckService",["$resource",function($resource){
+	return $resource("/isLoggedIn",{}, {
+		isLoggedIn: {method:"get"}
+	});
+}]);
 
 app.controller("loginController",function($scope,authService,$location,$timeout){
 
@@ -59,6 +74,8 @@ app.controller("loginController",function($scope,authService,$location,$timeout)
 	  };
 });
 
+
+
 app.factory("userInfoService",["$resource",function($resource){
 	return $resource("/userInfo");
 }]);
@@ -69,10 +86,24 @@ app.factory("logoutService",["$resource",function($resource){
 	});
 }]);
 
-app.controller("mainViewController",function($scope,userInfoService,logoutService,$location,$timeout){
+app.controller("mainViewController",function($scope,authCheckService, userInfoService,logoutService,$location,$timeout){
 	$scope.user = {};
 	$scope.alert = [];
 	$scope.alertCollapsed = true;
+
+	$scope.$watch(authCheckService.query(), function (value, oldValue) {
+
+    if(!value && oldValue) {
+      console.log("Disconnect");
+      $location.path('/');
+    }
+
+    if(value) {
+      console.log("Connect");
+      //Do something when the user is connected
+    }
+
+  }, 401);
 
 	$scope.hideAlert = function(){
 	  		$scope.alertCollapsed = true;
