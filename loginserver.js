@@ -117,7 +117,7 @@ app.get("/userInfo",isAuthenticated,function(req,res){//the function isAuthentic
 
 app.post('/login',
   passport.authenticate('local'), function(req,res){//receives the auth request and send a 200 code if succeeded
-  res.status(200).end();
+  res.json(req.user);
   }
 );
 
